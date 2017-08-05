@@ -2,7 +2,6 @@ import React, {Component} from "react";
 
 export default class Graph extends Component {
     componentDidMount() {
-        console.log('this.props :: ', this.props);
         this.updateCanvas();
     }
 
@@ -10,9 +9,11 @@ export default class Graph extends Component {
         let ctx = this.refs.canvas.getContext("2d");
         let x1 = 100, y1 = 100, x2 = 100, y2 = 150, radius = 50, seconds = 2000;
         ctx.strokeStyle = this.getRandomColor();
-        ctx.arcTo(x1, y1, x2, y2, radius);
+        let angle = (this.props.percentage / 100) * 2 * Math.PI;
+        ctx.arc(x1, y1, 50, 0, angle);
+        // ctx.arcTo(x1, y1, x2, y2, radius);
         ctx.stroke();
-        this.strokeEvent(ctx, x1, y1, x2, y2, radius, seconds, 3);
+        // this.strokeEvent(ctx, x1, y1, x2, y2, radius, seconds, 3);
     }
 
     strokeEvent(ctx, x1, y1, x2, y2, radius, seconds, turn) {
@@ -43,7 +44,10 @@ export default class Graph extends Component {
 
     render() {
         return (
+            <span>
             <canvas ref="canvas" width={300} height={300}></canvas>
+                <span>{this.props.percentage}</span>
+            </span>
         );
     }
 }
