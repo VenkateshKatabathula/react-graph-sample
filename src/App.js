@@ -4,19 +4,23 @@ import './App.css';
 import Graph from './Graph';
 class App extends Component {
     getRandoms() {
-        let randomPercentages = [], tempSum = 0;
-        /*let noOfGraphs = 3, lastGraphIndex = noOfGraphs - 1;
-         for (let currentIter = 0; currentIter < noOfGraphs; currentIter++) {
-         let currRandom = ((currentIter === lastGraphIndex) ? 100 - tempSum
-         : parseInt(Math.random() * (100 - tempSum)));
-         tempSum += currRandom;
-         randomPercentages.push(currRandom);
-         }*/
-        randomPercentages = [25, 50, 75, 100];
+        // let randomPercentages = [], tempSum = 0;
+        // let noOfGraphs = 3, lastGraphIndex = noOfGraphs - 1;
+        // for (let currentIter = 0; currentIter < noOfGraphs; currentIter++) {
+        //     let currRandom = ((currentIter === lastGraphIndex) ? 100 - tempSum
+        //         : parseInt(Math.random() * (100 - tempSum)));
+        //     tempSum += currRandom;
+        //     randomPercentages.push(currRandom);
+        // }
+        let randomPercentages = {
+            25: "#FF0000",
+            50: "#00FF00",
+            75: "#0000FF"
+        };
         let graphs = [];
-        for (let i in randomPercentages) {
-            console.log(i);
-            graphs.push(<Graph key={i} percentage={randomPercentages[i]}/>);
+        for (let currPercentage in randomPercentages) {
+            graphs.push(<Graph key={currPercentage} percentage={parseInt(currPercentage)}
+                               color={randomPercentages[currPercentage]}/>);
         }
         /*randomPercentages.map(randoms => {
          graphs.push(<Graph key={randoms} percentage={randoms}/>);
