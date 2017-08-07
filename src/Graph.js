@@ -1,12 +1,9 @@
 import React, {Component} from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 export default class Graph extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            percentage: 0
-        };
     }
 
     componentDidMount() {
@@ -14,22 +11,22 @@ export default class Graph extends Component {
     }
 
     createGraph() {
-        let canvasContext = this.refs[this.props.name].getContext('2d'), maxIterations = 25, currentIter = 0;
-        this.clearAndDraw(canvasContext, maxIterations, currentIter);
+        let canvasContext = this.refs[this.props.name].getContext('2d'), maxIterations = 25, currentIteration = 0;
+        this.clearAndDraw(canvasContext, maxIterations, currentIteration);
     }
 
-    clearAndDraw(canvasContext, maxIterations, currentIter) {
+    clearAndDraw(canvasContext, maxIterations, currentIteration) {
         let innerRadius = 45, outerRadius = 50, startAngle = 0, fullCircleAngle = 2 * Math.PI,
-            currText = (currentIter * this.props.percentage / maxIterations),
+            currText = (currentIteration * this.props.percentage / maxIterations),
             currAngle = (currText * fullCircleAngle) / 100;
         canvasContext.clearRect(0, 0, 400, 400);
         this.drawArc(canvasContext, 100, 100, outerRadius, startAngle, fullCircleAngle, null, "black");
         this.drawArc(canvasContext, 100, 100, innerRadius, startAngle, currAngle, currText);
-        currentIter++;
-        if (currentIter < maxIterations + 1) {
+        currentIteration++;
+        if (currentIteration < maxIterations + 1) {
             setTimeout(() => {
-                this.clearAndDraw(canvasContext, maxIterations, currentIter);
-            },100);
+                this.clearAndDraw(canvasContext, maxIterations, currentIteration);
+            }, 100);
         }
     }
 
@@ -45,13 +42,10 @@ export default class Graph extends Component {
     }
 
     render() {
-        let borderStyle = {border: "2px"}, //percentageStyle = {"marginLeft": "-100px"},
-            nameStyle = {"marginLeft": "-86px"};
         return (
             <span>
-                <canvas ref={this.props.name} width="300" height="150" style={borderStyle}></canvas>
-                {/*<div style={percentageStyle}>{this.state.percentage}</div>*/}
-                <div style={nameStyle}>{this.props.name}</div>
+                <canvas ref={this.props.name} width="200" height="150"></canvas>
+                <div>{this.props.name}</div>
             </span>
         );
     }

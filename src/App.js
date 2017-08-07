@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import "./App.css";
 import Graph from "./Graph";
 class App extends Component {
-    getRandoms() {
+    getGraphs() {
         let randomPercentages = {
             25: {color: "#FF0000", name: "New users"},
             50: {color: "#a212ff", name: "Popularity"},
@@ -23,7 +23,7 @@ class App extends Component {
                 <div className="App-header">
                     <h2>Analysis Reports</h2>
                 </div>
-                {this.getRandoms()}
+                {this.getGraphs()}
             </div>
         );
     }
