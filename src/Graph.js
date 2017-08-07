@@ -10,48 +10,47 @@ export default class Graph extends Component {
     }
 
     componentDidMount() {
-        this.draw();
+        this.createGraph();
     }
 
-    draw() {
-        let outerCanvasContext = this.refs.canvas.getContext("2d");
-        outerCanvasContext.beginPath();
-        outerCanvasContext.arc(100, 75, 50, 0, 2 * Math.PI);
-        outerCanvasContext.strokeStyle = "#000000";
-        outerCanvasContext.stroke();
-        outerCanvasContext.save();
-        let innerCanvasContext = this.refs.canvas.getContext("2d");
-        innerCanvasContext.beginPath();
-        let divideIntoParts = 5, currDivision = 0;
-        let x1 = 100, y1 = 75;
-        this.update(currDivision, divideIntoParts, innerCanvasContext, x1, y1);
+    createGraph() {
+        let canvasContext = this.refs[this.props.name].getContext('2d'), maxIterations = 50, currentIter = 0;
+        this.clearAndDraw(canvasContext, maxIterations, currentIter);
     }
 
-    update(currIteration, divideIntoParts, innerCanvasContext, x1, y1) {
-        if (currIteration < divideIntoParts) {
-            let angle = (this.props.percentage / 100) * 2 * (currIteration + 1) / divideIntoParts * Math.PI;
-            console.log('currDivision :: ', currIteration);
-            innerCanvasContext.clearRect(0, 0, innerCanvasContext.width, innerCanvasContext.height);
-            innerCanvasContext.arc(x1, y1, 45, 0, angle);
-            innerCanvasContext.strokeStyle = this.props.color;
-            innerCanvasContext.font = "15px Arial";
-            // innerCanvasContext.fillText(this.state.percentage, x1, y1);
-            innerCanvasContext.closePath();
-            innerCanvasContext.stroke();
-            this.setState({percentage: (currIteration + 1) / divideIntoParts * this.props.percentage});
-            setTimeout(() => {
-                this.update(++currIteration, divideIntoParts, innerCanvasContext, x1, y1, this.state.percentage);
-            }, 1000);
+    clearAndDraw(canvasContext, maxIterations, currentIter) {
+        let innerRadius = 45, outerRadius = 50, startAngle = 0, fullCircleAngle = 2 * Math.PI,
+            currText = (currentIter * this.props.percentage / maxIterations),
+            currAngle = (currText * fullCircleAngle) / 100;
+        canvasContext.clearRect(0, 0, 400, 400);
+        this.drawArc(canvasContext, 100, 100, outerRadius, startAngle, fullCircleAngle, null, "black");
+        this.drawArc(canvasContext, 100, 100, innerRadius, startAngle, currAngle, currText);
+        currentIter++;
+        if (currentIter < maxIterations + 1) {
+            requestAnimationFrame(() => {
+                this.clearAndDraw(canvasContext, maxIterations, currentIter);
+            });
         }
     }
 
+    drawArc(context, xPos, yPos, radius, startAngle, endAngle, text, color) {
+        context.beginPath();
+        context.arc(xPos, yPos, radius, startAngle, endAngle);
+        if (text) {
+            context.fillText(text, xPos - 8, yPos + 10);
+            context.font = "15px Arial";
+        }
+        context.strokeStyle = color ? color : this.props.color;
+        context.stroke();
+    }
+
     render() {
-        let borderStyle = {border: "2px"}, percentageStyle = {"marginLeft": "-100px"},
+        let borderStyle = {border: "2px"}, //percentageStyle = {"marginLeft": "-100px"},
             nameStyle = {"marginLeft": "-86px"};
         return (
             <span>
-                <canvas ref="canvas" width="300" height="150" style={borderStyle}></canvas>
-                <div style={percentageStyle}>{this.state.percentage}</div>
+                <canvas ref={this.props.name} width="300" height="150" style={borderStyle}></canvas>
+                {/*<div style={percentageStyle}>{this.state.percentage}</div>*/}
                 <div style={nameStyle}>{this.props.name}</div>
             </span>
         );
