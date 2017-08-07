@@ -2,6 +2,13 @@ import React, {Component} from "react";
 import PropTypes from 'prop-types';
 
 export default class Graph extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            percentage: 0
+        };
+    }
+
     componentDidMount() {
         this.draw();
     }
@@ -15,21 +22,37 @@ export default class Graph extends Component {
         outerCanvasContext.save();
         let innerCanvasContext = this.refs.canvas.getContext("2d");
         innerCanvasContext.beginPath();
+        let divideIntoParts = 5, currDivision = 0;
         let x1 = 100, y1 = 75;
-        let angle = (this.props.percentage / 100) * 2 * Math.PI;
-        innerCanvasContext.arc(x1, y1, 40, 0, angle);
-        innerCanvasContext.strokeStyle = this.props.color;
-        // ctx.arcTo(x1, y1, x2, y2, radius);
-        innerCanvasContext.stroke();
-        // this.strokeEvent(ctx, x1, y1, x2, y2, radius, seconds, 3);
+        this.update(currDivision, divideIntoParts, innerCanvasContext, x1, y1);
+    }
+
+    update(currIteration, divideIntoParts, innerCanvasContext, x1, y1) {
+        if (currIteration < divideIntoParts) {
+            let angle = (this.props.percentage / 100) * 2 * (currIteration + 1) / divideIntoParts * Math.PI;
+            console.log('currDivision :: ', currIteration);
+            console.log('angle :: ', angle);
+            innerCanvasContext.clearRect(0, 0, innerCanvasContext.width, innerCanvasContext.height);
+            innerCanvasContext.arc(x1, y1, 45, 0, angle);
+            innerCanvasContext.strokeStyle = this.props.color;
+            innerCanvasContext.font = "15px Arial";
+            innerCanvasContext.fillText(this.state.percentage, x1, y1);
+            innerCanvasContext.closePath();
+            innerCanvasContext.stroke();
+            this.setState({percentage: (currIteration + 1) / divideIntoParts * this.props.percentage});
+            setTimeout(() => {
+                this.update(++currIteration, divideIntoParts, innerCanvasContext, x1, y1, this.state.percentage);
+            }, 1000);
+        }
     }
 
     render() {
         let borderStyle = {border: "2px"};
         return (
             <span>
-                <span>{this.props.percentage}</span>
+                {/*<span>{this.state.percentage}</span>*/}
                 <canvas ref="canvas" width="300" height="150" style={borderStyle}></canvas>
+                <br />
             </span>
         );
     }
