@@ -14,22 +14,21 @@ export default class Graph extends Component {
     }
 
     createGraph() {
-        let canvasContext = this.refs[this.props.name].getContext('2d'), timeToTakeInSeconds = 25, current = 0;
-        this.clearAndDraw(canvasContext, timeToTakeInSeconds, current);
+        let canvasContext = this.refs[this.props.name].getContext('2d'), maxIterations = 50, currentIter = 0;
+        this.clearAndDraw(canvasContext, maxIterations, currentIter);
     }
 
-    clearAndDraw(canvasContext, timeToTakeInSeconds, current) {
+    clearAndDraw(canvasContext, maxIterations, currentIter) {
         let innerRadius = 45, outerRadius = 50, startAngle = 0, fullCircleAngle = 2 * Math.PI,
-            currText = (current * this.props.percentage / timeToTakeInSeconds),
+            currText = (currentIter * this.props.percentage / maxIterations),
             currAngle = (currText * fullCircleAngle) / 100;
         canvasContext.clearRect(0, 0, 400, 400);
         this.drawArc(canvasContext, 100, 100, outerRadius, startAngle, fullCircleAngle, null, "black");
-        this.drawArc(canvasContext, 100, 100, innerRadius, startAngle, currAngle,
-            (current * this.props.percentage) / timeToTakeInSeconds);
-        current++;
-        if (current < timeToTakeInSeconds + 1) {
+        this.drawArc(canvasContext, 100, 100, innerRadius, startAngle, currAngle, currText);
+        currentIter++;
+        if (currentIter < maxIterations + 1) {
             requestAnimationFrame(() => {
-                this.clearAndDraw(canvasContext, timeToTakeInSeconds, current);
+                this.clearAndDraw(canvasContext, maxIterations, currentIter);
             });
         }
     }
