@@ -14,7 +14,7 @@ export default class Graph extends Component {
     }
 
     createGraph() {
-        let canvasContext = this.refs[this.props.name].getContext('2d'), maxIterations = 50, currentIter = 0;
+        let canvasContext = this.refs[this.props.name].getContext('2d'), maxIterations = 25, currentIter = 0;
         this.clearAndDraw(canvasContext, maxIterations, currentIter);
     }
 
@@ -27,9 +27,9 @@ export default class Graph extends Component {
         this.drawArc(canvasContext, 100, 100, innerRadius, startAngle, currAngle, currText);
         currentIter++;
         if (currentIter < maxIterations + 1) {
-            requestAnimationFrame(() => {
+            setTimeout(() => {
                 this.clearAndDraw(canvasContext, maxIterations, currentIter);
-            });
+            },100);
         }
     }
 
