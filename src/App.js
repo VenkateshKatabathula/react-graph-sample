@@ -13,14 +13,17 @@ class App extends Component {
         //     randomPercentages.push(currRandom);
         // }
         let randomPercentages = {
-            25: "#FF0000",
-            50: "#00FF00",
-            75: "#0000FF"
+            25: {color: "#FF0000", name: "name 1"},
+            50: {color: "#00FF00", name: "name 2"},
+            75: {color: "#0000FF", name: "name 3"}
         };
         let graphs = [];
         for (let currPercentage in randomPercentages) {
+            console.log('color : ', randomPercentages[currPercentage]);
+            console.log('name : ', randomPercentages[currPercentage]);
             graphs.push(<Graph key={currPercentage} percentage={parseInt(currPercentage)}
-                               color={randomPercentages[currPercentage]}/>);
+                               color={randomPercentages[currPercentage].color}
+                               name={randomPercentages[currPercentage].name}/>);
         }
         /*randomPercentages.map(randoms => {
          graphs.push(<Graph key={randoms} percentage={randoms}/>);
@@ -32,8 +35,7 @@ class App extends Component {
         return (
             <div className="App">
                 <div className="App-header">
-                    <img src={logo} className="App-logo" alt="logo"/>
-                    <h2>Welcome to React</h2>
+                    <h2>Analysis Reports</h2>
                 </div>
                 {this.getRandoms()}
             </div>

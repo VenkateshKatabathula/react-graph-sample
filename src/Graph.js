@@ -31,12 +31,11 @@ export default class Graph extends Component {
         if (currIteration < divideIntoParts) {
             let angle = (this.props.percentage / 100) * 2 * (currIteration + 1) / divideIntoParts * Math.PI;
             console.log('currDivision :: ', currIteration);
-            console.log('angle :: ', angle);
             innerCanvasContext.clearRect(0, 0, innerCanvasContext.width, innerCanvasContext.height);
             innerCanvasContext.arc(x1, y1, 45, 0, angle);
             innerCanvasContext.strokeStyle = this.props.color;
             innerCanvasContext.font = "15px Arial";
-            innerCanvasContext.fillText(this.state.percentage, x1, y1);
+            // innerCanvasContext.fillText(this.state.percentage, x1, y1);
             innerCanvasContext.closePath();
             innerCanvasContext.stroke();
             this.setState({percentage: (currIteration + 1) / divideIntoParts * this.props.percentage});
@@ -47,35 +46,19 @@ export default class Graph extends Component {
     }
 
     render() {
-        let borderStyle = {border: "2px"};
+        let borderStyle = {border: "2px"}, percentageStyle = {"marginLeft": "-100px"},
+            nameStyle = {"marginLeft": "-86px"};
         return (
             <span>
-                {/*<span>{this.state.percentage}</span>*/}
                 <canvas ref="canvas" width="300" height="150" style={borderStyle}></canvas>
-                <br />
+                <div style={percentageStyle}>{this.state.percentage}</div>
+                <div style={nameStyle}>{this.props.name}</div>
             </span>
         );
     }
-
-    /*strokeEvent(ctx, x1, y1, x2, y2, radius, seconds, turn) {
-     window.setTimeout(() => {
-     ctx.restore();
-     console.log(turn);
-     console.log('filling');
-     x1 = x2;
-     y1 = y2;
-     x2 += 50;
-     y2 += 50;
-     ctx.strokeStyle = this.getColor();
-     ctx.arcTo(x1, y1, x2, y2, radius);
-
-     ctx.stroke();
-     if (--turn !== 0) this.strokeEvent(ctx, x1, y1, x2, y2, radius, seconds, turn);
-     }, seconds);
-     }*/
-
 }
 Graph.propTypes = {
     percentage: PropTypes.number.isRequired,
-    color: PropTypes.string.isRequired
+    color: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired
 };
